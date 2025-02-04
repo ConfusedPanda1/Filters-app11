@@ -94,131 +94,137 @@ int main()
 }
 
 void whiteAndBlack(unsigned char image[SIZE][SIZE])
- {
+{
     for (int i = 0; i < SIZE; i++)
     {
         for (int j = 0; j < SIZE; j++)
         {
           if (image[i][j] > 128)
-              {
+          {
                 image[i][j] = 255;
-              }
+          }
           else 
-              {
+          {
                 image[i][j] = 0;
-              }
+          }
         }
     }
 }
 void loadImage(unsigned char image[256][256])
 {
     string inputFilename;
-    while (true) {
-        cout << "Enter the name of the image file: ";
-        cin >> inputFilename;
-        inputFilename += ".bmp";
-
-        if (readGSBMP(inputFilename.c_str(), image) == 0) 
-            return;
-
-        cout << "Error: File not found. Please try again." << endl;
-    }
-}void saveImage(unsigned char image[256][256]) {
+    if (readGSBMP(inputFilename.c_str(), image) != 0) 
+    {
+           while(true)
+           {
+            cout << "Error, File not found,Please enter the name of the image file" << endl;
+            cin >> inputFilename;
+            inputFilename = inputFilename + ".bmp";
+            if(readGSBMP(inputFilename.c_str(), image) == 0)
+            break;
+           }
+    } 
+}
+void saveImage(unsigned char image[256][256])
+{
     string outputFilename;
     cout << "Enter the name for the output file: ";
     cin >> outputFilename;
-    outputFilename += ".bmp";
-
+    outputFilename = outputFilename+ ".bmp";
     writeGSBMP(outputFilename.c_str(), image);
 }
 void colorinversion(unsigned char image[SIZE][SIZE])
 {
     for (int i = 0; i < 256; i++)
-                     {
-                         for (int j = 0; j < 256; j++)
-                            {
-                    image[i][j] = 255 - image[i][j];
-                            }
-                      }
+    {
+        for (int j = 0; j < 256; j++)
+        {
+            image[i][j] = 255 - image[i][j];
+        }
+    }
 }
 
 void mergeimages(unsigned char image[SIZE][SIZE])
 {
-    
-        unsigned char image2[256][256];    
-        string inputFilename2; 
+    unsigned char image2[256][256];    
+    string inputFilename2; 
     
     cout << "Enter the name of the second image file: ";   
     cin >> inputFilename2;
     inputFilename2 = inputFilename2 + ".bmp";
     
     if (readGSBMP(inputFilename2.c_str(), image2) != 0) 
-      {
-           while(true)
-           {
-            cout << "Error, File not found,Please enter the name of the image file" << endl;
-            cin >> inputFilename2;
-            inputFilename2 = inputFilename2 + ".bmp";
-            if(readGSBMP(inputFilename2.c_str(), image2) == 0)
+    {
+        while(true)
+        {
+        cout << "Error, File not found,Please enter the name of the image file" << endl;
+        cin >> inputFilename2;
+        inputFilename2 = inputFilename2 + ".bmp";
+        if(readGSBMP(inputFilename2.c_str(), image2) == 0)
             break;
-           } 
-      } 
-      for (int i = 0; i < 256; i++)
-            {
-                for (int j = 0; j < 256; j++)
-                 {
-                   image[i][j] = (image2[i][j] + image[i][j])/2;
-                 }
-            }
+        } 
+    }
+
+    for (int i = 0; i < 256; i++)
+    {
+        for (int j = 0; j < 256; j++)
+        {
+            image[i][j] = (image2[i][j] + image[i][j])/2;
+        }
+    }
 }
 void flipimage(unsigned char image[SIZE][SIZE])
 {
     cout<<"How do you want to flip the picture"<<endl;
-         cout<<"1. Horizontally" << endl;
-         cout<<"2. Vertically" << endl;
-
-         int flipchoice;
-         cin >> flipchoice;
-         if(flipchoice == 1)
-         {
-            for (int i = 0; i < 256; i++)
+    cout<<"1. Horizontally" << endl;
+    cout<<"2. Vertically" << endl;
+      
+    int flipchoice;
+    cin >> flipchoice;
+    
+    if(flipchoice == 1)
+    {
+        for (int i = 0; i < 256; i++)
+        {
+            for (int j = 0; j < 128; j++)
             {
-                for (int j = 0; j < 128; j++)
-                {
-                    unsigned char temp = image[i][j];
-                    image[i][j] = image[i][255 - j];
-                    image[i][255 - j] = temp;
-                }
+                unsigned char temp = image[i][j];
+                image[i][j] = image[i][255 - j];
+                image[i][255 - j] = temp;
             }
-         }
-         else if(flipchoice == 2)
-         {
-           for (int j = 0; j < 256; j++)
+        }
+    }
+    
+    else if(flipchoice == 2)
+    {
+        for (int j = 0; j < 256; j++)
+        {
+            for (int i = 0; i < 128; i++)
             {
-                for (int i = 0; i < 128; i++)
-                {
-                    unsigned char temp = image[i][j];
-                    image[i][j] = image[255 - i][j];
-                    image[255 - i][j] = temp;
-                }
+                unsigned char temp = image[i][j];
+                image[i][j] = image[255 - i][j];
+                image[255 - i][j] = temp;
             }
-         }
-         else
-         {
-            while(true)
-            {
-                cout << "Invalid choice, Please enter 1 or 2" << endl;
-                cin >> flipchoice;
-                if(flipchoice == 1 || flipchoice == 2)
+        }
+     }
+        
+     else
+    {
+        while(true)
+        {
+            cout << "Invalid choice, Please enter 1 or 2" << endl;
+            cin >> flipchoice;
+            if(flipchoice == 1 || flipchoice == 2)
                 break;
-            }
-         }
+        }
+    }
 }
 
 void rotateiamge(unsigned char image[SIZE][SIZE])
 {
     int rotatechoice;
     bool validChoice = false;
+
     while (!validChoice)
     {
         cout << "How do you want to rotate the picture?" << endl;
@@ -231,12 +237,13 @@ void rotateiamge(unsigned char image[SIZE][SIZE])
         {
             validChoice = true;
         }
+
         else
         {
             cout << "Invalid choice, please enter 1, 2, or 3." << endl; 
         }
     }
-
+      
     unsigned char temp[256][256];
 
     switch (rotatechoice)
@@ -271,39 +278,41 @@ void rotateiamge(unsigned char image[SIZE][SIZE])
             }
             break;
     }
-    for (int i = 0; i < 256; i++)
-    {
-        for (int j = 0; j < 256; j++)
+
+        for (int i = 0; i < 256; i++)
         {
-            image[i][j] = temp[i][j];
+            for (int j = 0; j < 256; j++)
+            {
+                image[i][j] = temp[i][j];
+            }
         }
-    }
 }
 void lightenimage(unsigned char image[SIZE][SIZE])
 {
     for (int i = 0; i < 256; i++)
-          {
-              for (int j = 0; j < 256; j++)
-                {
-                   if(image[i][j]<=170)
-                       {
-                        image[i][j] = image[i][j]+85;
-                       }
-                          else
-                          {
-                              image[i][j] = 255;
-                          }
-                }
+    {
+        for (int j = 0; j < 256; j++)
+        {
+            if(image[i][j]<=170)
+            {
+                image[i][j] = image[i][j]+85;
+            }
+                          
+            else
+            {
+                image[i][j] = 255;
+            }
         }
+    }
 }
 
 void darkenimage(unsigned char image[SIZE][SIZE])
 {
-       for(int i =0;i<256;i++)
-           {
-              for (int j = 0; j < 256; j++)
-                 {
+    for(int i =0;i<256;i++)
+    {
+        for (int j = 0; j < 256; j++)
+            {
                 image[i][j] = image[i][j]/2;
-                 }
-           }
+            }
+    }
 }
