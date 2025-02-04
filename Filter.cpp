@@ -27,6 +27,8 @@ void saveImage(unsigned char image[256][256]) {
     writeGSBMP(outputFilename.c_str(), image);
 }
 
+void whiteAndBlack(unsigned char image[SIZE][SIZE]);
+
 int main() 
 {
     unsigned char image[256][256];
@@ -50,21 +52,10 @@ while(true)
     switch (choice)
     {
         case 1:
-            {for (int i = 0; i < 256; i++)
+        // !!indentation problems
             {
-                for (int j = 0; j < 256; j++)
-                {
-                    if (image[i][j] > 128)
-                    {
-                        image[i][j] = 255;
-                    }
-                    else
-                    {
-                        image[i][j] = 0;
-                    } 
-                }
-            }
-            break;
+                whiteAndBlack(image);
+                break;
             }
 
         case 2:
@@ -267,4 +258,18 @@ while(true)
     cout << "Filter applied successfully" << endl;
 }
     return 0;
+}
+
+
+
+void whiteAndBlack(unsigned char image[SIZE][SIZE]) {
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            if (image[i][j] > 128) {
+                image[i][j] = 255;
+            } else {
+                image[i][j] = 0;
+            }
+        }
+    }
 }
