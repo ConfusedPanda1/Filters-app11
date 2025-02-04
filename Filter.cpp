@@ -5,7 +5,113 @@ using namespace std;
 
 
 
-void loadImage(unsigned char image[256][256]) {
+void loadImage(unsigned char image[SIZE][SIZE]);
+void saveImage(unsigned char image[SIZE][SIZE]);
+void whiteAndBlack(unsigned char image[SIZE][SIZE]);
+void colorinversion(unsigned char image[SIZE][SIZE]);
+void mergeimages(unsigned char image[SIZE][SIZE]);
+void flipimage(unsigned char image[SIZE][SIZE]);
+void rotateiamge(unsigned char image[SIZE][SIZE]);
+void lightenimage(unsigned char image[SIZE][SIZE]);
+void darkenimage(unsigned char image[SIZE][SIZE]);
+
+int main() 
+{
+        unsigned char image[256][256];
+        while(true)
+        {
+            loadImage(image);
+            
+            
+            cout << "Welcome to the filter app, Please select your filter" << endl;
+            cout << "1. White and Black " << endl;
+            cout << "2. Color inversion " << endl;
+            cout << "3. Merge images" << endl;
+            cout << "4. Flip image" << endl;
+            cout << "5. rotate image" << endl;
+            cout << "6. lighten the image by 50%" << endl;
+            cout << "7. Darken the image by 50%" << endl;
+            cout << "8. Exit" << endl;
+
+            int choice;
+            cin >> choice;
+            switch (choice)
+            {
+                case 1:
+                {
+                        whiteAndBlack(image);
+                        break;
+                }
+                case 2:
+                {
+                        colorinversion(image);
+                        break;
+                }
+                case 3:
+                {
+                        mergeimages(image);
+                        break;
+                }    
+                case 4:
+                {
+                        flipimage(image);
+                        break;
+                }
+                case 5:
+                {
+                        rotateiamge(image);
+                        break;
+                }
+                case 6:
+                {
+                        lightenimage(image);
+                        break;
+                }
+                case 7:
+                {
+                        darkenimage(image);
+                        break;
+                }
+
+                case 8:
+                {
+                    cout<< "Thanks for using the filter app";
+                    return 0;
+                    
+                }
+                default:
+                {
+                cout << "Invalid choice, please select a valid option." << endl;
+                        continue;
+                }
+
+            }
+                saveImage(image);
+
+                cout << "Filter applied successfully" << endl;
+        }
+            return 0;
+}
+
+void whiteAndBlack(unsigned char image[SIZE][SIZE])
+ {
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < SIZE; j++)
+        {
+          if (image[i][j] > 128)
+              {
+                image[i][j] = 255;
+              }
+          else 
+              {
+                image[i][j] = 0;
+              }
+        }
+    }
+}
+void loadImage(unsigned char image[256][256])
+{
     string inputFilename;
     while (true) {
         cout << "Enter the name of the image file: ";
@@ -17,8 +123,7 @@ void loadImage(unsigned char image[256][256]) {
 
         cout << "Error: File not found. Please try again." << endl;
     }
-}
-void saveImage(unsigned char image[256][256]) {
+}void saveImage(unsigned char image[256][256]) {
     string outputFilename;
     cout << "Enter the name for the output file: ";
     cin >> outputFilename;
@@ -26,55 +131,24 @@ void saveImage(unsigned char image[256][256]) {
 
     writeGSBMP(outputFilename.c_str(), image);
 }
-
-void whiteAndBlack(unsigned char image[SIZE][SIZE]);
-
-int main() 
+void colorinversion(unsigned char image[SIZE][SIZE])
 {
-    unsigned char image[256][256];
-while(true)
-{
-    loadImage(image);
-    
-       
-    cout << "Welcome to the filter app, Please select your filter" << endl;
-    cout << "1. White and Black " << endl;
-    cout << "2. Color inversion " << endl;
-    cout << "3. Merge images" << endl;
-    cout << "4. Flip image" << endl;
-    cout << "5. rotate image" << endl;
-    cout << "6. lighten the image by 50%" << endl;
-    cout << "7. Darken the image by 50%" << endl;
-    cout << "8. Exit" << endl;
-
-    int choice;
-    cin >> choice;
-    switch (choice)
-    {
-        case 1:
-        // !!indentation problems
-            {
-                whiteAndBlack(image);
-                break;
-            }
-
-        case 2:
-            {for (int i = 0; i < 256; i++)
-            {
-                for (int j = 0; j < 256; j++)
-                {
+    for (int i = 0; i < 256; i++)
+                     {
+                         for (int j = 0; j < 256; j++)
+                            {
                     image[i][j] = 255 - image[i][j];
-                }
-            }
-            break;
-            }
+                            }
+                      }
+}
 
-        case 3:
-          {
+void mergeimages(unsigned char image[SIZE][SIZE])
+{
+    
         unsigned char image2[256][256];    
         string inputFilename2; 
     
-    cout << "Enter the name of the image file: ";   
+    cout << "Enter the name of the second image file: ";   
     cin >> inputFilename2;
     inputFilename2 = inputFilename2 + ".bmp";
     
@@ -96,12 +170,10 @@ while(true)
                    image[i][j] = (image2[i][j] + image[i][j])/2;
                  }
             }
-            break;
-          }
-          
-        case 4:
-        {
-         cout<<"How do you want to flip the picture"<<endl;
+}
+void flipimage(unsigned char image[SIZE][SIZE])
+{
+    cout<<"How do you want to flip the picture"<<endl;
          cout<<"1. Horizontally" << endl;
          cout<<"2. Vertically" << endl;
 
@@ -141,9 +213,9 @@ while(true)
                 break;
             }
          }
-          break;
-        }
-        case 5:
+}
+
+void rotateiamge(unsigned char image[SIZE][SIZE])
 {
     int rotatechoice;
     bool validChoice = false;
@@ -206,70 +278,32 @@ while(true)
             image[i][j] = temp[i][j];
         }
     }
-
-    break;
 }
-
-        case 6:
-        {
-        for (int i = 0; i < 256; i++)
-        {
-            for (int j = 0; j < 256; j++)
-            {
-              if(image[i][j]<=170)
-              {
-                image[i][j] = image[i][j]+85;
-              }
-              else
-              {
-                image[i][j] = 255;
-              }
-            }
-        }
-        break;
-        }
-        case 7:
-        {
-         for(int i =0;i<256;i++)
+void lightenimage(unsigned char image[SIZE][SIZE])
+{
+    for (int i = 0; i < 256; i++)
           {
-            for (int j = 0; j < 256; j++)
-            {
+              for (int j = 0; j < 256; j++)
+                {
+                   if(image[i][j]<=170)
+                       {
+                        image[i][j] = image[i][j]+85;
+                       }
+                          else
+                          {
+                              image[i][j] = 255;
+                          }
+                }
+        }
+}
+
+void darkenimage(unsigned char image[SIZE][SIZE])
+{
+       for(int i =0;i<256;i++)
+           {
+              for (int j = 0; j < 256; j++)
+                 {
                 image[i][j] = image[i][j]/2;
-            }
-          }
-            break;
-        }
-
-        case 8:
-        {
-            cout<< "Thanks for using the filter app";
-            return 0;
-            
-        }
-
-          
-
-        default:
-        cout << "Invalid choice, please select a valid option." << endl;
-                continue;
-    }
-    saveImage(image);
-
-    cout << "Filter applied successfully" << endl;
-}
-    return 0;
-}
-
-
-
-void whiteAndBlack(unsigned char image[SIZE][SIZE]) {
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j < SIZE; j++) {
-            if (image[i][j] > 128) {
-                image[i][j] = 255;
-            } else {
-                image[i][j] = 0;
-            }
-        }
-    }
+                 }
+           }
 }
