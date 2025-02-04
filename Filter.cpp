@@ -3,8 +3,6 @@
 
 using namespace std;
 
-
-
 void loadImage(unsigned char image[SIZE][SIZE]);
 void saveImage(unsigned char image[SIZE][SIZE]);
 void whiteAndBlack(unsigned char image[SIZE][SIZE]);
