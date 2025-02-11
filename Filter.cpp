@@ -12,83 +12,112 @@ void flipimage(unsigned char image[SIZE][SIZE]);
 void rotateiamge(unsigned char image[SIZE][SIZE]);
 void lightenimage(unsigned char image[SIZE][SIZE]);
 void darkenimage(unsigned char image[SIZE][SIZE]);
+void edgedetection(unsigned char image[SIZE][SIZE]);
+void blurimage(unsigned char image[SIZE][SIZE]);
+void enlargeimage(unsigned char image[SIZE][SIZE]);
+void shuffleimage(unsigned char image[SIZE][SIZE]);
+
+
 
 int main() 
 {
-        unsigned char image[256][256];
-        while(true)
+    unsigned char image[256][256];
+    while(true)
+    {
+        loadImage(image);
+        
+        
+        cout << "Welcome to the filter app, Please select your filter" << endl;
+        cout << "1. White and Black " << endl;
+        cout << "2. Color inversion " << endl;
+        cout << "3. Merge images" << endl;
+        cout << "4. Flip image" << endl;
+        cout << "5. rotate image" << endl;
+        cout << "6. lighten the image by 50%" << endl;
+        cout << "7. Darken the image by 50%" << endl;
+        cout << "8. Edge detection" << endl;
+        cout << "9. Blur image" << endl;
+        cout << "10. Enlarge image" << endl;
+        cout << "11. Shuffle image" << endl;
+        cout << "12. Exit" << endl;
+
+        int choice;
+        cin >> choice;
+        switch (choice)
         {
-            loadImage(image);
-            
-            
-            cout << "Welcome to the filter app, Please select your filter" << endl;
-            cout << "1. White and Black " << endl;
-            cout << "2. Color inversion " << endl;
-            cout << "3. Merge images" << endl;
-            cout << "4. Flip image" << endl;
-            cout << "5. rotate image" << endl;
-            cout << "6. lighten the image by 50%" << endl;
-            cout << "7. Darken the image by 50%" << endl;
-            cout << "8. Exit" << endl;
-
-            int choice;
-            cin >> choice;
-            switch (choice)
+            case 1:
             {
-                case 1:
-                {
-                        whiteAndBlack(image);
-                        break;
-                }
-                case 2:
-                {
-                        colorinversion(image);
-                        break;
-                }
-                case 3:
-                {
-                        mergeimages(image);
-                        break;
-                }    
-                case 4:
-                {
-                        flipimage(image);
-                        break;
-                }
-                case 5:
-                {
-                        rotateiamge(image);
-                        break;
-                }
-                case 6:
-                {
-                        lightenimage(image);
-                        break;
-                }
-                case 7:
-                {
-                        darkenimage(image);
-                        break;
-                }
-
-                case 8:
-                {
-                    cout<< "Thanks for using the filter app";
-                    return 0;
-                    
-                }
-                default:
-                {
-                cout << "Invalid choice, please select a valid option." << endl;
-                        continue;
-                }
-
+                whiteAndBlack(image);
+                break;
             }
-                saveImage(image);
+            case 2:
+            {
+                colorinversion(image);
+                break;
+            }
+            case 3:
+            {
+                mergeimages(image);
+                break;
+            }    
+            case 4:
+            {
+                flipimage(image);
+                break;
+            }
+            case 5:
+            {
+                rotateiamge(image);
+                break;
+            }
+            case 6:
+            {
+                lightenimage(image);
+                break;
+            }
+            case 7:
+            {
+                darkenimage(image);
+                break;
+            }
+            case 8:
+            {
+                edgedetection(image);
+                break;
+            }
+            case 9:
+            {
+                blurimage(image);
+                break;
+            }
+            case 10:
+            {
+                enlargeimage(image);
+                break;
+            }
+            case 11:
+            {
+                shuffleimage(image);
+                break;
+            }
+            case 12:
+            {
+                cout<< "Thanks for using the filter app";
+                return 0;
+                
+            }
+            default:
+            {
+            cout << "Invalid choice, please select a valid option." << endl;
+                    continue;
+            }
 
-                cout << "Filter applied successfully" << endl;
         }
-            return 0;
+            saveImage(image);
+
+            cout << "Filter applied successfully" << endl;
+    }
+        return 0;
 }
 
 void whiteAndBlack(unsigned char image[SIZE][SIZE])
@@ -110,18 +139,22 @@ void whiteAndBlack(unsigned char image[SIZE][SIZE])
 }
 void loadImage(unsigned char image[256][256])
 {
-    string inputFilename;
+    string inputFilename; 
+    cout << "Enter the name of the image file: ";   
+    cin >> inputFilename;
+    inputFilename = inputFilename + ".bmp";
+    
     if (readGSBMP(inputFilename.c_str(), image) != 0) 
     {
-           while(true)
-           {
-            cout << "Error, File not found,Please enter the name of the image file" << endl;
-            cin >> inputFilename;
-            inputFilename = inputFilename + ".bmp";
-            if(readGSBMP(inputFilename.c_str(), image) == 0)
+        while(true)
+        {
+        cout << "Error, File not found,Please enter the name of the image file" << endl;
+        cin >> inputFilename;
+        inputFilename = inputFilename + ".bmp";
+        if(readGSBMP(inputFilename.c_str(), image) == 0)
             break;
-           }
-    } 
+        } 
+    }
 }
 void saveImage(unsigned char image[256][256])
 {
@@ -275,6 +308,7 @@ void rotateiamge(unsigned char image[SIZE][SIZE])
                 }
             }
             break;
+
     }
 
         for (int i = 0; i < 256; i++)
@@ -309,8 +343,138 @@ void darkenimage(unsigned char image[SIZE][SIZE])
     for(int i =0;i<256;i++)
     {
         for (int j = 0; j < 256; j++)
-            {
+        {
                 image[i][j] = image[i][j]/2;
+        }
+    }
+}
+
+void edgedetection(unsigned char image[SIZE][SIZE])
+{
+    unsigned char temp[256][256];
+    
+    for (int i = 1; i < SIZE - 1; i++)
+    {
+        for (int j = 1; j < SIZE - 1; j++)
+        {
+            int diff = 0;
+            int center = image[i][j];
+            
+            diff = max(diff, abs(center - image[i - 1][j])); 
+            diff = max(diff, abs(center - image[i + 1][j])); 
+            diff = max(diff, abs(center - image[i][j - 1])); 
+            diff = max(diff, abs(center - image[i][j + 1])); 
+            diff = max(diff, abs(center - image[i - 1][j - 1])); 
+            diff = max(diff, abs(center - image[i - 1][j + 1])); 
+            diff = max(diff, abs(center - image[i + 1][j - 1])); 
+            diff = max(diff, abs(center - image[i + 1][j + 1])); 
+            
+            if (diff > 50)
+            {
+                temp[i][j] = 0;
             }
+            else
+            {
+                temp[i][j] = 255;
+            }
+        }
+    }
+    
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < SIZE; j++)
+        {
+            image[i][j] = temp[i][j];
+        }
+    }
+}
+void blurimage(unsigned char image[SIZE][SIZE])
+{
+    unsigned char temp[256][256];
+    for(int i =1;i<256;i++)
+    {
+        for (int j = 1; j < 256; j++)
+        {
+            int sum = 0;
+            for(int k = -1; k<=1; k++)
+            {
+                for(int l = -1; l<=1; l++)
+                {
+                    sum =sum + image[i+k][j+l];
+                }
+            }
+            sum = sum/9;
+            temp[i][j] = sum;
+            
+        }
+    }
+
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < SIZE; j++)
+        {
+            image[i][j] = temp[i][j];
+        }
+    }
+}
+void enlargeimage(unsigned char image[SIZE][SIZE])
+{
+    unsigned char temp[SIZE][SIZE];
+    int enlargechoice;
+
+    cout << "Which quarter do you want to zoom in on?" << endl;
+    cout << "1. Top left" << endl;
+    cout << "2. Top right" << endl;
+    cout << "3. Bottom left" << endl;
+    cout << "4. Bottom right" << endl;
+    cin >> enlargechoice;
+
+    while (enlargechoice < 1 || enlargechoice > 4) {
+        cout << "Invalid choice, please enter 1, 2, 3, or 4: ";
+        cin >> enlargechoice;
+    }
+
+    int startX, startY;
+
+    if (enlargechoice == 1 || enlargechoice == 2) {
+        startX = 0;
+    } else {
+        startX = 128;
+    }
+
+    if (enlargechoice == 1 || enlargechoice == 3) {
+        startY = 0;
+    } else {
+        startY = 128;
+    }
+
+    for (int i = 0; i < 128; i++) {
+        for (int j = 0; j < 128; j++) {
+            unsigned char pixel = image[startX + i][startY + j];
+
+            temp[i * 2][j * 2] = pixel;
+            temp[i * 2][j * 2 + 1] = pixel;
+            temp[i * 2 + 1][j * 2] = pixel;
+            temp[i * 2 + 1][j * 2 + 1] = pixel;
+        }
+    }
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            image[i][j] = temp[i][j];
+        }
+    }
+}void shuffleimage(unsigned char image[SIZE][SIZE])
+{
+    for(int i =0;i<256;i++)
+    {
+        for (int j = 0; j < 256; j++)
+        {
+            int rand_i = rand() % 256;
+            int rand_j = rand() % 256;
+            unsigned char temp = image[i][j];
+            image[i][j] = image[rand_i][rand_j];
+            image[rand_i][rand_j] = temp;
+            
+        }
     }
 }
