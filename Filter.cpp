@@ -212,7 +212,11 @@ void flipimage(unsigned char image[SIZE][SIZE])
       
     int flipchoice;
     cin >> flipchoice;
-    
+    while(flipchoice>2)
+    {
+        cout << "Invalid choice, please enter a valid option." << endl;
+        cin >> flipchoice;
+    }
     if(flipchoice == 1)
     {
         for (int i = 0; i < 256; i++)
@@ -238,17 +242,6 @@ void flipimage(unsigned char image[SIZE][SIZE])
             }
         }
      }
-        
-     else
-    {
-        while(true)
-        {
-            cout << "Invalid choice, Please enter 1 or 2" << endl;
-            cin >> flipchoice;
-            if(flipchoice == 1 || flipchoice == 2)
-                break;
-        }
-    }
 }
 
 void rotateiamge(unsigned char image[SIZE][SIZE])
@@ -469,11 +462,7 @@ void enlargeimage(unsigned char image[SIZE][SIZE])
     {
         for (int j = 0; j < 256; j++)
         {
-            int rand_i = rand() % 256;
-            int rand_j = rand() % 256;
-            unsigned char temp = image[i][j];
-            image[i][j] = image[rand_i][rand_j];
-            image[rand_i][rand_j] = temp;
+            
             
         }
     }
