@@ -456,14 +456,41 @@ void enlargeimage(unsigned char image[SIZE][SIZE])
             image[i][j] = temp[i][j];
         }
     }
-}void shuffleimage(unsigned char image[SIZE][SIZE])
-{
-    for(int i =0;i<256;i++)
+}
+void shuffleimage(unsigned char image[SIZE][SIZE])
+ {
+    unsigned char temp[SIZE][SIZE]; 
+    int order[4];
+
+    cout << "Enter the order of quarters (1-4, separated by spaces): ";
+
+    for (int i = 0; i < 4; i++)
     {
-        for (int j = 0; j < 256; j++)
+        cin >> order[i];
+    }
+    int quarterX[4] = {0, 0, 128, 128};
+    int quarterY[4] = {0, 128, 0, 128};
+
+    for (int i = 0; i < 4; i++)
+    {
+        int srcX = quarterX[order[i] - 1];
+        int srcY = quarterY[order[i] - 1];
+        int destX = quarterX[i];
+        int destY = quarterY[i];
+
+        for (int x = 0; x < 128; x++)
         {
-            
-            
+            for (int y = 0; y < 128; y++)
+            {
+                temp[destX + x][destY + y] = image[srcX + x][srcY + y];
+            }
+        }
+    }
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < SIZE; j++)
+        {
+            image[i][j] = temp[i][j];
         }
     }
 }
